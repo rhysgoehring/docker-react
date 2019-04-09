@@ -8,3 +8,19 @@ before_install:
 
 script:
    - docker run rhysgoehring/docker-react npm run test -- --coverage
+
+# Inside deploy we add config to tell TravisCI exactly how to take our app and deploy it to AWS
+deploy:
+  provider: elasticbeanstalk
+  region: "us-west-2"
+  app: "docker"
+  env: "Docker-env"
+  bucket_name: "elasticbeanstalk-us-west-2-529212055338"
+  bucket_path: "docker"
+  # Anytime we push code to the master branch, we deploy:
+  on:
+    branch: master
+  # Specify environmental variables
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
